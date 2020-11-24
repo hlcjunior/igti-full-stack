@@ -1,9 +1,5 @@
 window.addEventListener('load', start);
 
-var inputRange = null;
-var inputNumber = null;
-var inputNumberFull = null;
-
 var arrUnitSpecialTen = [
     'zero',
     'um',
@@ -51,22 +47,17 @@ var arrHundred = [
 ];
 
 function start() {
-    inputRange = document.querySelector('#range');
-    inputNumber = document.querySelector('#number');
-    inputNumberFull = document.querySelector('#numberFull');
-
-    inputRange.addEventListener('change', setNumber);
-    inputRange.addEventListener('change', setNumberFull);
-    inputRange.focus();
+    document.querySelector('#range').addEventListener('change', setNumberFull);
 }
 
-function setNumber() {
-    inputNumber.value = inputRange.value;
-}
+function setNumberFull(event) {
+    var number = event.target.value;
 
-function setNumberFull() {
-    var number = inputNumber.value;
     var numberLen = number.length;
+
+    var inputNumberFull = document.querySelector('#numberFull');
+
+    document.querySelector('#number').value = number;
 
     switch (numberLen) {
         case 1:

@@ -1,34 +1,57 @@
 body {
-    font-size: 1.5em;
+    padding: 10px;
+    padding-top: 100px;
+    background-color: rgb(209, 209, 209);
+    font-family: 'Roboto', sans-serif !important;
 }
 
 input {
-    display: block;
-    margin-bottom: 20px;
-    font-size: 1em;
-    outline: none;
+    font-size: 1.4em !important;
+    color: #333 !important;
+}
+
+.container {
+    width: 50% !important;
+    background-color: #fff;
+    padding-top: 40px !important;
+    background-image: linear-gradient(to top, #e6e6e6, #fff) !important;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.active {
+    font-size: 1.5em !important;
+    color: #06689b !important;
 }
 
 .header {
+    margin: 0 auto;
     text-align: center;
+    background-color: #06689b;
+    background-image: linear-gradient(to bottom, #06689b, #0171ad) !important;
+    color: #fff;
+    padding: 10px;
+    font-size: 4em;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    width: 50% !important;
+    border-bottom: 5px solid #f7941e;
 }
 
-.label {
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: #333;
+input[type='range']::-webkit-slider-thumb {
+    background-color: #06689b !important;
+}
+input[type='range']::-moz-range-thumb {
+    background-color: #06689b !important;
+}
+input[type='range']::-ms-thumb {
+    background-color: #06689b !important;
 }
 
-.numberFull {
-    width: 100%;
+/***** These are to edit the thumb and the text inside the thumb *****/
+input[type='range'] + .thumb {
+    background-color: #dedede !important;
 }
-
-.number {
-    width: 60px;
-}
-
-.readonly {
-    background-color: #fff;
-    border: none;
-    color: #444;
+input[type='range'] + .thumb.active .value {
+    color: #06689b !important;
 }

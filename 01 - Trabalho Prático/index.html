@@ -5,34 +5,49 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Trabalho Prático - Módulo 01</title>
         <link rel="stylesheet" href="./css/styles.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+        />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+            rel="stylesheet"
+        />
     </head>
     <body>
-        <div class="header">
-            <h1>Números por Extenso</h1>
+        <div class="header">Números por Extenso</div>
+        <div class="container">
+            <div class="row">
+                <div class="input-field col s12">
+                    <label class="active" for="range"
+                        >Selecione um número entre 0 e 999</label
+                    >
+                    <p class="range-field">
+                        <input
+                            type="range"
+                            id="range"
+                            min="0"
+                            max="1000"
+                            focus
+                            value="0"
+                        />
+                    </p>
+                </div>
+                <div class="input-field col s12">
+                    <label class="active" for="number">Número atual</label>
+                    <input type="text" id="number" disabled value="0" />
+                </div>
+
+                <div class="input-field col s12">
+                    <label class="active" for="numberFull"
+                        >Número por extenso</label
+                    >
+                    <input type="text" id="numberFull" disabled value="zero" />
+                </div>
+            </div>
         </div>
-
-        <div class="label">Selecione um número entre 0 e 999</div>
-        <input type="range" id="range" min="0" max="1000" focus value="0" />
-
-        <div class="label">Número atual</div>
-        <input
-            class="number readonly"
-            type="text"
-            id="number"
-            id=""
-            readonly
-            value="0"
-        />
-
-        <div class="label">Número por extenso</div>
-        <input
-            class="numberFull readonly"
-            type="text"
-            id="numberFull"
-            readonly
-            value="zero"
-        />
-
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
         <script src="./js/script.js"></script>
     </body>
 </html>
