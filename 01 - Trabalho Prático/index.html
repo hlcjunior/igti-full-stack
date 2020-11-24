@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Trabalho Prático - Módulo 01</title>
+        <link rel="stylesheet" href="./css/styles.css" />
+    </head>
+    <body>
+        <div class="header">
+            <h1>Números por Extenso</h1>
+        </div>
+
+        <div class="label">Selecione um número entre 0 e 999</div>
+        <input type="range" id="range" min="0" max="1000" focus value="0" />
+
+        <div class="label">Número atual</div>
+        <input
+            class="number readonly"
+            type="text"
+            id="number"
+            id=""
+            readonly
+            value="0"
+        />
+
+        <div class="label">Número por extenso</div>
+        <input
+            class="numberFull readonly"
+            type="text"
+            id="numberFull"
+            readonly
+            value="zero"
+        />
+
+        <script src="./js/script.js"></script>
+    </body>
+</html>
