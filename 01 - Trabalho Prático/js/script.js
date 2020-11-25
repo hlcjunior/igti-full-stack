@@ -47,7 +47,7 @@ var arrHundred = [
 ];
 
 function start() {
-    document.querySelector('#range').addEventListener('change', setNumberFull);
+    document.querySelector('#range').addEventListener('input', setNumberFull);
 }
 
 function setNumberFull(event) {
