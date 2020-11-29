@@ -20,30 +20,42 @@
         <div class="container">
             <div class="row">
                 <div class="input-field col s12">
-                    <label class="active" for="range"
-                        >Selecione um número entre 0 e 999</label
-                    >
+                    <label class="active" for="range">
+                        Selecione um número entre 0 e 999
+                    </label>
                     <p class="range-field">
                         <input
                             type="range"
                             id="range"
                             min="0"
                             max="1000"
-                            focus
+                            autofocus
                             value="0"
                         />
                     </p>
                 </div>
                 <div class="input-field col s12">
                     <label class="active" for="number">Número atual</label>
-                    <input type="text" id="number" disabled value="0" />
+                    <input
+                        type="text"
+                        id="number"
+                        disabled
+                        readonly
+                        value="0"
+                    />
                 </div>
 
                 <div class="input-field col s12">
                     <label class="active" for="numberFull"
                         >Número por extenso</label
                     >
-                    <input type="text" id="numberFull" disabled value="zero" />
+                    <input
+                        type="text"
+                        id="numberFull"
+                        disabled
+                        readonly
+                        value="zero"
+                    />
                 </div>
             </div>
         </div>
