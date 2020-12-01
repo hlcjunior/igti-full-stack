@@ -1,0 +1,74 @@
+body {
+    background-color: rgb(236, 236, 236);
+    font-family: 'Roboto', sans-serif !important;
+    font-size: 1.5em;
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #00796b rgb(236, 236, 236);
+}
+
+/* Works on Chrome/Edge/Safari */
+*::-webkit-scrollbar {
+    width: 12px;
+}
+*::-webkit-scrollbar-track {
+    background: rgb(236, 236, 236);
+}
+*::-webkit-scrollbar-thumb {
+    background-color: #00796b;
+    border-radius: 10px;
+    border: 2px solid rgb(236, 236, 236);
+}
+
+img {
+    border-radius: 50%;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+div.header {
+    width: 100%;
+    font-size: 2.5em;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 50px;
+    color: #fff;
+    background-color: #00796b;
+    top: 0px !important;
+}
+
+div.btn-after-input {
+    margin-top: 25px !important;
+    margin-left: -10px !important;
+}
+
+div.content-result,
+.content-statistic {
+    border: 1px dotted #00695c;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    color: #333;
+}
+
+div .header-result,
+.header-statistic {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+div .result,
+.statistic {
+    text-align: left;
+    min-height: 500px;
+    max-height: 500px;
+    overflow: auto;
+    scrollbar-width: thin;
+}
+
+div.result {
+    line-height: 3;
+}
