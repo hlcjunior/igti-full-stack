@@ -1,0 +1,16 @@
+{
+    "name": "03-trabalho-pratico-modulo2",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Hudson Lúcio de Carvalho Júnior",
+    "license": "ISC",
+    "type": "module",
+    "nodemonConfig": {
+        "ext": "js"
+    },
+    "dependencies": {}
+}

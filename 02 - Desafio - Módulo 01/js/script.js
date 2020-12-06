@@ -9,33 +9,29 @@ let usersFiltered = [];
 
 let numberFormat = null;
 
-const start = () => {
+const start = async () => {
     numberFormat = Intl.NumberFormat('pt-BR', {
         maximumFractionDigits: 2,
     });
 
-    connect();
+    await connect();
+    prepareSearch();
 };
 
-const handleSearch = (event) => {
+const handleSearch = ({ key, target }) => {
     const user = inputSearchText.value.trim();
 
     btSearch.disabled = user === '';
 
-    if (
-        user !== '' &&
-        (event.key === 'Enter' || event.target.id === 'btSearch')
-    ) {
+    if (user !== '' && (key === 'Enter' || target.id === 'btSearch')) {
         searchUser(user);
     }
 };
 
 const searchUser = () => {
-    usersFiltered = allUsers.filter((user) => {
-        return user.name
-            .toString()
-            .toLowerCase()
-            .includes(inputSearchText.value.toString().toLowerCase());
+    const searchText = inputSearchText.value.toString().toLowerCase();
+    usersFiltered = allUsers.filter(({ nameLower }) => {
+        return nameLower.includes(searchText);
     });
 
     renderResults();
@@ -89,16 +85,10 @@ const renderStatistics = () => {
     }
 
     const statistics = usersFiltered.reduce(
-        (accumulator, current) => {
-            if (current.gender === 'male') {
-                accumulator.sumMale++;
-            }
+        (accumulator, { gender, age }) => {
+            gender === 'male' ? accumulator.sumMale++ : accumulator.sumFemale++;
 
-            if (current.gender === 'female') {
-                accumulator.sumFemale++;
-            }
-
-            accumulator.sumAge += current.age;
+            accumulator.sumAge += age;
 
             return accumulator;
         },
@@ -137,21 +127,18 @@ const connect = async () => {
     var json = await res.json();
 
     allUsers = json
-        .map((user) => {
-            const { name, picture, dob, gender } = user;
+        .map(({ name, picture, dob, gender }) => {
+            const nameFull = `${name.first} ${name.last}`;
 
             return {
-                name: `${name.first} ${name.last}`,
+                name: nameFull,
+                nameLower: nameFull.toLowerCase(),
                 picture: picture.thumbnail,
                 age: dob.age,
                 gender,
             };
         })
-        .sort((a, b) => {
-            return a.name.localeCompare(b.name);
-        });
-
-    prepareSearch();
+        .sort((a, b) => a.name.localeCompare(b.name));
 };
 
 const prepareSearch = () => {
