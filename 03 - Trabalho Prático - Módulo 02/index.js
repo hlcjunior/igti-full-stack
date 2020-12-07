@@ -17,66 +17,74 @@ const init = async () => {
             jsonStates,
             true
         );
-        const cityOfBiggerName = await getCityOfBiggerName(citiesOfBiggerNames);
-        const cityOfSmallerName = await getCityOfBiggerName(
-            citiesOfSmallerNames,
+        const cityOfBiggerName = await getBiggestCityName(
+            citiesOfBiggerNames.slice(0)
+        );
+        const cityOfSmallerName = await getBiggestCityName(
+            citiesOfSmallerNames.slice(0),
             true
         );
 
-        //console.log('5 UFs com mais cidades', top5States);
-        //console.log('5 UFs com menos cidades', bottom5States);
-        /*
+        console.log('5 UFs com mais cidades: ', top5States);
+        console.log('5 UFs com menos cidades: ', bottom5States);
         console.log(
             'Lista das cidades com maior nome por UF',
             citiesOfBiggerNames
         );
-        */
-        /*
         console.log(
             'Lista das cidades com menor nome por UF',
             citiesOfSmallerNames
         );
-        */
-        //console.log('Cidade com o maior nome', cityOfBiggerName);
-        //console.log('Cidade com o menor nome', cityOfSmallerName);
+        console.log('Cidade com o maior nome: ', cityOfBiggerName);
+        console.log('Cidade com o menor nome: ', cityOfSmallerName);
     } catch (error) {
         console.error(error);
     }
 };
 
-const getCityOfBiggerName = async (cities, reverse) => {
-    if (reverse) {
-        return cities.sort((a, b) => b.length - a.length).slice(-1);
-    }
+const getBiggestCityName = async (cities, reverse) => {
+    const citiesSort = cities.sort((a, b) => {
+        if (a.length == b.length) {
+            return a.localeCompare(b);
+        }
 
-    return cities.sort((a, b) => b.length - a.length).slice(0, 1);
+        if (reverse) {
+            return a.length > b.length && reverse ? 1 : -1;
+        } else {
+            return a.length > b.length ? -1 : 1;
+        }
+    });
+
+    return citiesSort[0];
 };
 
 const getCitiesOfBiggerNames = async (jsonStates, reverse) => {
     let citiesOfBiggerNames = [];
+
     for (const { Sigla } of jsonStates) {
         const cities = JSON.parse(
             await readFile(`${citiesStatePath}/${Sigla}.json`)
         );
 
-        const biggerName = cities
+        const citiesSort = cities
             .map(({ Nome }) => {
                 return {
                     city: Nome,
                     state: Sigla,
+                    total: Nome.length,
                 };
             })
-            .sort((a, b) => b.city.length - a.city.length);
-
-        if (reverse) {
-            citiesOfBiggerNames.push(
-                `${biggerName.slice(-1)[0].city} - ${Sigla}`
-            );
-        } else {
-            citiesOfBiggerNames.push(
-                `${biggerName.slice(0, 1)[0].city} - ${Sigla}`
-            );
-        }
+            .sort((a, b) => {
+                if (a.city.length === b.city.length) {
+                    return a.city.localeCompare(b.city);
+                }
+                if (reverse) {
+                    return a.city.length > b.city.length ? 1 : -1;
+                } else {
+                    return b.city.length > a.city.length ? 1 : -1;
+                }
+            });
+        citiesOfBiggerNames.push(`${citiesSort[0].city} - ${Sigla}`);
     }
 
     return citiesOfBiggerNames;
