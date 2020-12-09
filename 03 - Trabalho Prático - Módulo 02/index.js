@@ -1,7 +1,12 @@
-import { reverse } from 'dns';
 import { promises as fs } from 'fs';
 
 const citiesStatePath = './json/cities-by-state';
+let top5States;
+let bottom5States;
+let citiesOfBiggerNames;
+let citiesOfSmallerNames;
+let biggestCityName;
+let smallestCityName;
 
 const init = async () => {
     try {
@@ -10,49 +15,38 @@ const init = async () => {
 
         await createJsonFilesCitiesByState(jsonStates, jsonCities);
 
-        const top5States = await getTop5States(jsonStates);
-        const bottom5States = await getTop5States(jsonStates, true);
-        const citiesOfBiggerNames = await getCitiesOfBiggerNames(jsonStates);
-        const citiesOfSmallerNames = await getCitiesOfBiggerNames(
-            jsonStates,
-            true
-        );
-        const cityOfBiggerName = await getBiggestCityName(
+        top5States = await getTop5States(jsonStates);
+        bottom5States = await getTop5States(jsonStates, true);
+        citiesOfBiggerNames = await getCitiesOfBiggerNames(jsonStates);
+        citiesOfSmallerNames = await getCitiesOfBiggerNames(jsonStates, true);
+        biggestCityName = await getBiggestCityName(
             citiesOfBiggerNames.slice(0)
         );
-        const cityOfSmallerName = await getBiggestCityName(
+        smallestCityName = await getBiggestCityName(
             citiesOfSmallerNames.slice(0),
             true
         );
 
-        console.log('5 UFs com mais cidades: ', top5States);
-        console.log('5 UFs com menos cidades: ', bottom5States);
-        console.log(
-            'Lista das cidades com maior nome por UF',
-            citiesOfBiggerNames
-        );
-        console.log(
-            'Lista das cidades com menor nome por UF',
-            citiesOfSmallerNames
-        );
-        console.log('Cidade com o maior nome: ', cityOfBiggerName);
-        console.log('Cidade com o menor nome: ', cityOfSmallerName);
+        printData();
     } catch (error) {
         console.error(error);
     }
+    console.timeEnd();
 };
 
 const getBiggestCityName = async (cities, reverse) => {
     const citiesSort = cities.sort((a, b) => {
-        if (a.length == b.length) {
+        if (parseInt(a.length) === parseInt(b.length)) {
             return a.localeCompare(b);
         }
 
-        if (reverse) {
-            return a.length > b.length && reverse ? 1 : -1;
-        } else {
-            return a.length > b.length ? -1 : 1;
-        }
+        return reverse
+            ? parseInt(a.length) > parseInt(b.length)
+                ? 1
+                : -1
+            : parseInt(b.length) > parseInt(a.length)
+            ? 1
+            : -1;
     });
 
     return citiesSort[0];
@@ -71,19 +65,23 @@ const getCitiesOfBiggerNames = async (jsonStates, reverse) => {
                 return {
                     city: Nome,
                     state: Sigla,
-                    total: Nome.length,
+                    totalString: parseInt(Nome.length),
                 };
             })
             .sort((a, b) => {
-                if (a.city.length === b.city.length) {
+                if (a.totalString === b.totalString) {
                     return a.city.localeCompare(b.city);
                 }
-                if (reverse) {
-                    return a.city.length > b.city.length ? 1 : -1;
-                } else {
-                    return b.city.length > a.city.length ? 1 : -1;
-                }
+
+                return reverse
+                    ? a.totalString > b.totalString
+                        ? 1
+                        : -1
+                    : b.totalString > a.totalString
+                    ? 1
+                    : -1;
             });
+
         citiesOfBiggerNames.push(`${citiesSort[0].city} - ${Sigla}`);
     }
 
@@ -94,31 +92,24 @@ const getTop5States = async (jsonStates, reverse) => {
     let statesCountCities = [];
 
     for (const { Sigla } of jsonStates) {
-        statesCountCities.push({
-            state: Sigla,
-            totalCities: await getTotalCities(Sigla),
-        });
+        statesCountCities.push(`${Sigla} - ${await getTotalCities(Sigla)}`);
     }
 
-    let ordered = statesCountCities.sort(
-        (a, b) => b.totalCities - a.totalCities
-    );
+    let ordered = statesCountCities.sort((a, b) => {
+        const totalA = parseInt(a.replace(/\D/g, ''));
+        const totalB = parseInt(b.replace(/\D/g, ''));
 
-    ordered = reverse ? ordered.slice(-5) : ordered.slice(0, 5);
-
-    let result = [];
-    ordered.map(({ state, totalCities }) => {
-        result.push(`${state} - ${totalCities}`);
+        return reverse ? (totalA > totalB ? 1 : -1) : totalB > totalA ? 1 : -1;
     });
 
-    return result;
+    return ordered.slice(0, 5);
 };
 
 const getTotalCities = async (state) => {
     const jsonFile = JSON.parse(
         await readFile(`${citiesStatePath}/${state}.json`)
     );
-    return jsonFile.length;
+    return parseInt(jsonFile.length);
 };
 
 const createJsonFilesCitiesByState = async (jsonStates, jsonCities) => {
@@ -149,4 +140,17 @@ const createFile = async (file, data) => {
     }
 };
 
+const printData = () => {
+    console.log('5 UFs com mais cidades: ', top5States);
+    console.log('5 UFs com menos cidades: ', bottom5States);
+    console.log('Lista das cidades com maior nome por UF', citiesOfBiggerNames);
+    console.log(
+        'Lista das cidades com menor nome por UF',
+        citiesOfSmallerNames
+    );
+    console.log('Cidade com o maior nome: ', biggestCityName);
+    console.log('Cidade com o menor nome: ', smallestCityName);
+};
+
+console.time();
 init();
