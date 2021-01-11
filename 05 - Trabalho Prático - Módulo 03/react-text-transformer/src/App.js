@@ -51,6 +51,44 @@ export default class App extends Component {
             camelCaseText,
         } = this.state;
 
+        const transform = [
+            {
+                id: 'invertedText',
+                label: 'Texto invertido',
+                value: invertedText,
+            },
+            {
+                id: 'numericText',
+                label: 'Texto numérico',
+                value: numericText,
+            },
+            {
+                id: 'csvText',
+                label: 'CSV',
+                value: csvText,
+            },
+            {
+                id: 'slugText',
+                label: 'Slug',
+                value: slugText,
+            },
+            {
+                id: 'vowelsOnlyText',
+                label: 'Somente Vogais',
+                value: vowelsOnlyText,
+            },
+            {
+                label: 'Somente Consoantes',
+                id: 'consonantsOnlyText',
+                value: consonantsOnlyText,
+            },
+            {
+                label: 'Variável',
+                id: 'camelCaseText',
+                value: camelCaseText,
+            },
+        ];
+
         return (
             <div className="container">
                 <h3 className="center-text">react-text-transformer</h3>
@@ -66,61 +104,18 @@ export default class App extends Component {
 
                 <h3 className="center-text">Transformações</h3>
 
-                <Input
-                    label="Texto invertido"
-                    id="invertedText"
-                    value={invertedText}
-                    readOnly
-                    copyButton
-                />
-
-                <Input
-                    label="Texto numérico"
-                    id="numericText"
-                    value={numericText}
-                    readOnly
-                    copyButton
-                />
-
-                <Input
-                    label="CSV"
-                    id="csvText"
-                    value={csvText}
-                    readOnly
-                    copyButton
-                />
-
-                <Input
-                    label="Slug"
-                    id="slugText"
-                    value={slugText}
-                    readOnly
-                    copyButton
-                />
-
-                <Input
-                    label="Somente Vogais"
-                    id="vowelsOnlyText"
-                    value={vowelsOnlyText}
-                    readOnly
-                    copyButton
-                />
-
-                <Input
-                    label="Somente Consoantes"
-                    id="consonantsOnlyText"
-                    value={consonantsOnlyText}
-                    readOnly
-                    copyButton
-                />
-
-                <Input
-                    label="Variável"
-                    id="camelCaseText"
-                    value={camelCaseText}
-                    readOnly
-                    copyButton
-                />
+                {transform.map(({ label, id, value }) => {
+                    return (
+                        <Input
+                            key={id}
+                            label={label}
+                            id={id}
+                            value={value}
+                            readOnly
+                            copyButton
+                        />
+                    );
+                })}
             </div>
         );
     }
