@@ -56,9 +56,8 @@ export default class App extends Component {
                 <h3 className="center-text">react-text-transformer</h3>
 
                 <Input
-                    focus={true}
-                    selectOnFocus={true}
-                    selected
+                    focus
+                    selectOnFocus
                     label="Digite um texto qualquer"
                     placeholder="Informe um texto"
                     value={userInput}
@@ -71,56 +70,56 @@ export default class App extends Component {
                     label="Texto invertido"
                     id="invertedText"
                     value={invertedText}
-                    readOnly={true}
-                    copyButton={true}
+                    readOnly
+                    copyButton
                 />
 
                 <Input
                     label="Texto numérico"
                     id="numericText"
                     value={numericText}
-                    readOnly={true}
-                    copyButton={true}
+                    readOnly
+                    copyButton
                 />
 
                 <Input
                     label="CSV"
                     id="csvText"
                     value={csvText}
-                    readOnly={true}
-                    copyButton={true}
+                    readOnly
+                    copyButton
                 />
 
                 <Input
                     label="Slug"
                     id="slugText"
                     value={slugText}
-                    readOnly={true}
-                    copyButton={true}
+                    readOnly
+                    copyButton
                 />
 
                 <Input
                     label="Somente Vogais"
                     id="vowelsOnlyText"
                     value={vowelsOnlyText}
-                    readOnly={true}
-                    copyButton={true}
+                    readOnly
+                    copyButton
                 />
 
                 <Input
                     label="Somente Consoantes"
                     id="consonantsOnlyText"
                     value={consonantsOnlyText}
-                    readOnly={true}
-                    copyButton={true}
+                    readOnly
+                    copyButton
                 />
 
                 <Input
                     label="Variável"
                     id="camelCaseText"
                     value={camelCaseText}
-                    readOnly={true}
-                    copyButton={true}
+                    readOnly
+                    copyButton
                 />
             </div>
         );
