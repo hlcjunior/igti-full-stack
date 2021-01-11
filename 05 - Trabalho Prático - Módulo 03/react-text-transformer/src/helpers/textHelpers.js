@@ -40,7 +40,7 @@ function slugText(text) {
 }
 
 function vowelsOnlyText(text) {
-    const textArray = text.toUpperCase().split('');
+    const textArray = text.split('');
 
     return textArray
         .filter((letter) => {
@@ -60,7 +60,7 @@ function vowelsOnlyText(text) {
 }
 
 function consonantsOnlyText(text) {
-    const textArray = text.toUpperCase().split('');
+    const textArray = text.split('');
 
     return textArray
         .filter((letter) => {

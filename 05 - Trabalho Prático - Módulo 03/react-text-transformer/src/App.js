@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import CopyTextButton from './components/copy-text-button/CopyTextButton';
 import Input from './components/input/Input';
 import {
     csvText,
@@ -57,6 +56,9 @@ export default class App extends Component {
                 <h3 className="center-text">react-text-transformer</h3>
 
                 <Input
+                    focus={true}
+                    selectOnFocus={true}
+                    selected
                     label="Digite um texto qualquer"
                     placeholder="Informe um texto"
                     value={userInput}

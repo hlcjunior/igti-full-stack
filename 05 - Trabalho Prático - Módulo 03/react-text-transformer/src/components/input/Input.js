@@ -6,15 +6,26 @@ import css from './input.module.css';
 export default class Input extends Component {
     handleInputChange = (event) => {
         const { readOnly } = this.props;
+
         if (!readOnly) {
             const newText = event.target.value;
+
             this.props.onChange(newText);
+        }
+    };
+
+    handleInputFocus = (event) => {
+        const { selectOnFocus } = this.props;
+
+        if (selectOnFocus) {
+            event.target.select();
         }
     };
 
     render() {
         const {
             id,
+            focus,
             label,
             value,
             placeholder,
@@ -28,6 +39,8 @@ export default class Input extends Component {
 
                 <div className={css.flexRow}>
                     <input
+                        autoFocus={focus}
+                        onFocus={this.handleInputFocus}
                         id={id}
                         placeholder={placeholder}
                         type="text"
