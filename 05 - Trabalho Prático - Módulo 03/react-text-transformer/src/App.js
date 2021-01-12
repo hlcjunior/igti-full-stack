@@ -14,78 +14,51 @@ export default class App extends Component {
     constructor() {
         super();
 
-        this.state = {
-            userInput: '',
-            invertedText: '',
-            numericText: '',
-            csvText: '',
-            slugText: '',
-            vowelsOnlyText: '',
-            consonantsOnlyText: '',
-            camelCaseText: '',
-        };
+        this.state = { userInput: '' };
     }
 
     handleChangeUserInput = (newText) => {
-        this.setState({
-            userInput: newText,
-            invertedText: invertText(newText),
-            numericText: numericText(newText),
-            csvText: csvText(newText),
-            slugText: slugText(newText),
-            vowelsOnlyText: vowelsOnlyText(newText),
-            consonantsOnlyText: consonantsOnlyText(newText),
-            camelCaseText: camelCaseText(newText),
-        });
+        this.setState({ userInput: newText });
     };
 
     render() {
-        const {
-            userInput,
-            invertedText,
-            numericText,
-            csvText,
-            slugText,
-            vowelsOnlyText,
-            consonantsOnlyText,
-            camelCaseText,
-        } = this.state;
+        const { userInput } = this.state;
 
         const transform = [
             {
                 id: 'invertedText',
                 label: 'Texto invertido',
-                value: invertedText,
+                value: invertText(userInput),
             },
             {
                 id: 'numericText',
                 label: 'Texto numérico',
-                value: numericText,
+                value: numericText(userInput),
             },
             {
                 id: 'csvText',
                 label: 'CSV',
-                value: csvText,
+                value: csvText(userInput),
             },
             {
                 id: 'slugText',
                 label: 'Slug',
-                value: slugText,
+                value: slugText(userInput),
             },
             {
                 id: 'vowelsOnlyText',
                 label: 'Somente Vogais',
-                value: vowelsOnlyText,
+                value: vowelsOnlyText(userInput),
             },
             {
                 label: 'Somente Consoantes',
                 id: 'consonantsOnlyText',
-                value: consonantsOnlyText,
+                value: consonantsOnlyText(userInput),
             },
             {
                 label: 'Variável',
                 id: 'camelCaseText',
-                value: camelCaseText,
+                value: camelCaseText(userInput),
             },
         ];
 
