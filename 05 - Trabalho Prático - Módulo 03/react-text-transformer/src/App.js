@@ -1,14 +1,44 @@
 import React, { Component } from 'react';
 import Input from './components/input/Input';
-import {
-    csvText,
-    invertText,
-    numericText,
-    slugText,
-    vowelsOnlyText,
-    consonantsOnlyText,
-    camelCaseText,
-} from './helpers/textHelpers';
+import * as textHelpers from './helpers/textHelpers';
+
+const TRANSFORM = [
+    {
+        id: 'invertedText',
+        label: 'Texto invertido',
+        functionTransform: (text) => textHelpers.invertText(text),
+    },
+    {
+        id: 'numericText',
+        label: 'Texto numérico',
+        functionTransform: (text) => textHelpers.numericText(text),
+    },
+    {
+        id: 'csvText',
+        label: 'CSV',
+        functionTransform: (text) => textHelpers.csvText(text),
+    },
+    {
+        id: 'slugText',
+        label: 'Slug',
+        functionTransform: (text) => textHelpers.slugText(text),
+    },
+    {
+        id: 'vowelsOnlyText',
+        label: 'Somente Vogais',
+        functionTransform: (text) => textHelpers.vowelsOnlyText(text),
+    },
+    {
+        label: 'Somente Consoantes',
+        id: 'consonantsOnlyText',
+        functionTransform: (text) => textHelpers.consonantsOnlyText(text),
+    },
+    {
+        label: 'Variável',
+        id: 'camelCaseText',
+        functionTransform: (text) => textHelpers.camelCaseText(text),
+    },
+];
 
 export default class App extends Component {
     constructor() {
@@ -23,44 +53,6 @@ export default class App extends Component {
 
     render() {
         const { userInput } = this.state;
-
-        const transform = [
-            {
-                id: 'invertedText',
-                label: 'Texto invertido',
-                value: invertText(userInput),
-            },
-            {
-                id: 'numericText',
-                label: 'Texto numérico',
-                value: numericText(userInput),
-            },
-            {
-                id: 'csvText',
-                label: 'CSV',
-                value: csvText(userInput),
-            },
-            {
-                id: 'slugText',
-                label: 'Slug',
-                value: slugText(userInput),
-            },
-            {
-                id: 'vowelsOnlyText',
-                label: 'Somente Vogais',
-                value: vowelsOnlyText(userInput),
-            },
-            {
-                label: 'Somente Consoantes',
-                id: 'consonantsOnlyText',
-                value: consonantsOnlyText(userInput),
-            },
-            {
-                label: 'Variável',
-                id: 'camelCaseText',
-                value: camelCaseText(userInput),
-            },
-        ];
 
         return (
             <div className="container">
@@ -77,13 +69,13 @@ export default class App extends Component {
 
                 <h3 className="center-text">Transformações</h3>
 
-                {transform.map(({ label, id, value }) => {
+                {TRANSFORM.map(({ label, id, functionTransform }) => {
                     return (
                         <Input
                             key={id}
-                            label={label}
                             id={id}
-                            value={value}
+                            label={label}
+                            value={functionTransform(userInput)}
                             readOnly
                             copyButton
                         />

@@ -2,84 +2,39 @@ function normalizeText(text) {
     return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }
 
-function invertText(text) {
-    return text.split('').reverse().join('');
+export function invertText(text) {
+    return [...text].reverse().join('');
 }
 
-function numericText(text) {
-    const textArray = normalizeText(text.toUpperCase()).split('');
-
-    return textArray
-        .map((letter) => {
-            switch (letter) {
-                case 'O':
-                    return 0;
-                case 'L':
-                    return 1;
-                case 'E':
-                    return 3;
-                case 'A':
-                    return 4;
-                case 'S':
-                    return 5;
-                case 'T':
-                    return 7;
-                default:
-                    return letter;
-            }
-        })
-        .join('');
+export function numericText(text) {
+    return normalizeText(text)
+        .toUpperCase()
+        .replace(/['O']/g, '0')
+        .replace(/['L']/g, '1')
+        .replace(/['E']/g, '3')
+        .replace(/['A']/g, '4')
+        .replace(/['S']/g, '5')
+        .replace(/['T']/g, '7');
 }
 
-function csvText(text) {
+export function csvText(text) {
     return `"${text.split(' ').join('";"')}"`;
 }
 
-function slugText(text) {
-    return normalizeText(text.toLowerCase().split(' ').join('-'));
+export function slugText(text) {
+    return normalizeText(text).toLowerCase().split(' ').join('-');
 }
 
-function vowelsOnlyText(text) {
-    const textArray = text.split('');
-
-    return textArray
-        .filter((letter) => {
-            switch (normalizeText(letter.toUpperCase())) {
-                case 'A':
-                case 'E':
-                case 'I':
-                case 'O':
-                case 'U':
-                case ' ':
-                    return letter;
-                default:
-                    return '';
-            }
-        })
-        .join('');
+export function vowelsOnlyText(text) {
+    return normalizeText(text).replace(/['BCDFGHJKLMNPQRSTVWXYZ']/gi, '');
 }
 
-function consonantsOnlyText(text) {
-    const textArray = text.split('');
-
-    return textArray
-        .filter((letter) => {
-            switch (normalizeText(letter.toUpperCase())) {
-                case 'A':
-                case 'E':
-                case 'I':
-                case 'O':
-                case 'U':
-                    return '';
-                default:
-                    return letter;
-            }
-        })
-        .join('');
+export function consonantsOnlyText(text) {
+    return normalizeText(text).replace(/['AEIOU']/gi, '');
 }
 
-function camelCaseText(text) {
-    const textArray = normalizeText(text.toLowerCase()).split(' ');
+export function camelCaseText(text) {
+    const textArray = normalizeText(text).toLowerCase().split(' ');
 
     return (
         textArray[0] +
@@ -91,14 +46,3 @@ function camelCaseText(text) {
             .join('')
     );
 }
-
-export {
-    normalizeText,
-    invertText,
-    numericText,
-    csvText,
-    slugText,
-    vowelsOnlyText,
-    consonantsOnlyText,
-    camelCaseText,
-};

@@ -5,13 +5,8 @@ import css from './input.module.css';
 
 export default class Input extends Component {
     handleInputChange = (event) => {
-        const { readOnly } = this.props;
-
-        if (!readOnly) {
-            const newText = event.target.value;
-
-            this.props.onChange(newText);
-        }
+        const newText = event.target.value;
+        this.props.onChange(newText);
     };
 
     handleInputFocus = (event) => {
@@ -25,35 +20,33 @@ export default class Input extends Component {
     render() {
         const {
             id,
-            focus,
+            focus = false,
             label,
             value,
-            placeholder,
-            readOnly,
-            copyButton,
+            placeholder = ' ',
+            readOnly = false,
+            copyButton = false,
         } = this.props;
 
         return (
             <div>
-                <span>{label ? label + ':' : ''}</span>
-
                 <div className={css.flexRow}>
-                    <input
-                        autoFocus={focus}
-                        onFocus={this.handleInputFocus}
-                        id={id}
-                        placeholder={placeholder}
-                        type="text"
-                        value={value}
-                        onChange={this.handleInputChange}
-                        readOnly={readOnly}
-                    />
+                    <div className="input-field" style={{ flex: 7 }}>
+                        <label htmlFor={id}>{label && label + ':'}</label>
+                        <input
+                            id={id}
+                            autoFocus={focus}
+                            className="input-field"
+                            onFocus={this.handleInputFocus}
+                            placeholder={placeholder}
+                            type="text"
+                            value={value}
+                            onChange={this.handleInputChange}
+                            readOnly={readOnly}
+                        />
+                    </div>
 
-                    {copyButton ? (
-                        <CopyTextButton target={id} />
-                    ) : (
-                        <span></span>
-                    )}
+                    {copyButton && <CopyTextButton target={id} />}
                 </div>
             </div>
         );
