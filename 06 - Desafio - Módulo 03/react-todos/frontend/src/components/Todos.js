@@ -1,67 +1,65 @@
 import React from 'react';
+
 import { formatDateBR } from '../helpers/dateHelpers';
+
 import Summary from './Summary';
 import Todo from './Todo';
 
 export default function Todos({ todos }) {
-    let summary = {};
-    let totalTodo = 0;
-    let totalDone = 0;
-    let totalNotDone = 0;
-    let showHeader = false;
-    let showSummary = false;
+    let dayTodos = [];
     let currentDate = '';
 
-    const calcTotals = (done, clear = false) => {
-        if (clear) {
-            totalTodo = 0;
-            totalDone = 0;
-            totalNotDone = 0;
+    const showHeader = (date) => {
+        return (
+            <div className="center">
+                <strong style={{ fontSize: '1.3em' }}>
+                    {formatDateBR(date)}
+                </strong>
+            </div>
+        );
+    };
+
+    const showFooter = (todos) => {
+        return (
+            <div>
+                {<Summary todos={todos} />}
+                <hr style={styles.separator} />
+            </div>
+        );
+    };
+
+    const showDetails = (index, date, todo) => {
+        if (index === 0) {
+            currentDate = date;
+            dayTodos.push(todo);
+            return showHeader(date);
+        } else {
+            if (index > 0 && currentDate !== date) {
+                const todos = [...dayTodos];
+
+                currentDate = date;
+                dayTodos = [{ ...todo }];
+
+                return (
+                    <>
+                        {showFooter(todos)}
+                        {showHeader(date)}
+                    </>
+                );
+            } else {
+                dayTodos.push(todo);
+            }
         }
-        totalTodo++;
-        done ? totalDone++ : totalNotDone++;
     };
 
     return (
         <div>
-            {todos.map(({ id, date, description, done }, index) => {
-                if (index === 0) {
-                    currentDate = date;
-                    showHeader = true;
-                    calcTotals(done);
-                } else {
-                    if (index > 0 && currentDate !== date) {
-                        currentDate = date;
-                        showHeader = true;
-                        showSummary = true;
-                        summary = {
-                            totalTodo,
-                            totalDone,
-                            totalNotDone,
-                        };
-                        calcTotals(done, true);
-                    } else {
-                        showHeader = false;
-                        showSummary = false;
-                        calcTotals(done);
-                    }
-                }
+            {todos.map((todo, index) => {
+                const { id, date, description, done } = todo;
 
                 return (
                     <div key={id}>
-                        {showSummary && (
-                            <div>
-                                <Summary summary={summary} />{' '}
-                                <hr style={styles.separator} />
-                            </div>
-                        )}
-                        {showHeader && (
-                            <div className="center">
-                                <strong style={{ fontSize: '1.3em' }}>
-                                    {formatDateBR(date)}
-                                </strong>
-                            </div>
-                        )}
+                        {showDetails(index, date, todo)}
                         <Todo
                             id={id}
                             date={date}

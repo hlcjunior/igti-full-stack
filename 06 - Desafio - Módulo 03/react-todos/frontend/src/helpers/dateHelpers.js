@@ -1,30 +1,32 @@
-const YEARS = [2019, 2020, 2021];
+const YEARS = [
+    { value: 2019, description: 2019 },
+    { value: 2020, description: 2020 },
+    { value: 2021, description: 2021 },
+];
 const MONTHS = [
-    { monthNumber: 1, month: 'JAN' },
-    { monthNumber: 2, month: 'FEV' },
-    { monthNumber: 3, month: 'MAR' },
-    { monthNumber: 4, month: 'ABR' },
-    { monthNumber: 5, month: 'MAI' },
-    { monthNumber: 6, month: 'JUN' },
-    { monthNumber: 7, month: 'JUL' },
-    { monthNumber: 8, month: 'AGO' },
-    { monthNumber: 9, month: 'SET' },
-    { monthNumber: 10, month: 'OUT' },
-    { monthNumber: 11, month: 'NOV' },
-    { monthNumber: 12, month: 'DEZ' },
+    { value: 1, description: 'JAN' },
+    { value: 2, description: 'FEV' },
+    { value: 3, description: 'MAR' },
+    { value: 4, description: 'ABR' },
+    { value: 5, description: 'MAI' },
+    { value: 6, description: 'JUN' },
+    { value: 7, description: 'JUL' },
+    { value: 8, description: 'AGO' },
+    { value: 9, description: 'SET' },
+    { value: 10, description: 'OUT' },
+    { value: 11, description: 'NOV' },
+    { value: 12, description: 'DEZ' },
 ];
 
-function getAllYears() {
+export function getAllYears() {
     return YEARS;
 }
 
-function getAllMonths() {
+export function getAllMonths() {
     return MONTHS;
 }
 
-function formatDateBR(date) {
+export function formatDateBR(date) {
     const objDate = new Date(`${date} 23:59:59`);
     return objDate.toLocaleDateString('pt-BR');
 }
-
-export { getAllYears, getAllMonths, formatDateBR };
