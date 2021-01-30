@@ -2,154 +2,108 @@ import express from 'express';
 
 import { accountModel } from '../models/accountModule.js';
 
-import { AccountController } from '../controllers/accountController.js';
+import { AccountController, create } from '../controllers/accountController.js';
 
 const router = express.Router();
 
 const accountController = new AccountController();
 
-const msgNotAccount = (agencia, conta) => {
-    return `Não foi encontrada a conta nº ${conta} na agência nº ${agencia}`;
-};
-
 //CREATE
 router.post('/account', async (req, res, next) => {
-    try {
-        const account = await accountController.create(req.body);
-
-        res.send(account);
-    } catch (error) {
-        next(error);
-    }
+    next(await create(req, res));
 });
 
 //DEPOSIT
-router.patch('/account/deposit', async (req, res, next) => {
-    try {
-        const { agencia, conta, valor } = req.body;
+router.patch('/account/deposit', async (req, _res, next) => {
+    const { agencia, conta, valor } = req.body;
 
-        const account = await accountController.deposit(agencia, conta, valor);
+    const account = await accountController.deposit(agencia, conta, valor);
 
-        res.send(account);
-    } catch (error) {
-        next(error);
-    }
+    next(account);
 });
 
 //WITHDRAWAL
-router.patch('/account/withdrawal', async (req, res, next) => {
-    try {
-        const { agencia, conta, valor } = req.body;
+router.patch('/account/withdrawal', async (req, _res, next) => {
+    const { agencia, conta, valor } = req.body;
 
-        const account = await accountController.withdrawal(
-            agencia,
-            conta,
-            valor
-        );
+    const account = await accountController.withdrawal(agencia, conta, valor);
 
-        res.send(account);
-    } catch (error) {
-        next(error);
-    }
+    next(account);
 });
 
 //BALANCE
-router.get('/account/balance/:agencia/:conta', async (req, res, next) => {
-    try {
-        const { agencia, conta } = req.params;
+router.get('/account/balance/:agencia/:conta', async (req, _res, next) => {
+    const { agencia, conta } = req.params;
 
-        const account = await accountController.balance(agencia, conta);
+    const account = await accountController.balance(agencia, conta);
 
-        res.send(account);
-    } catch (error) {
-        next(error);
-    }
+    next(account);
 });
 
 //DELETE
-router.delete('/account/:agencia/:conta', async (req, res, next) => {
-    try {
-        const { agencia, conta } = req.params;
+router.delete('/account/:agencia/:conta', async (req, _res, next) => {
+    const { agencia, conta } = req.params;
 
-        const account = await accountController.delete(agencia, conta);
+    const account = await accountController.delete(agencia, conta);
 
-        res.send(account);
-    } catch (error) {
-        next(error);
-    }
+    next(account);
 });
 
 //TRANSFER
-router.patch('/account/transfer', async (req, res, next) => {
-    try {
-        const { contaOrigem, contaDestino, valor } = req.body;
+router.patch('/account/transfer', async (req, _res, next) => {
+    const { contaOrigem, contaDestino, valor } = req.body;
 
-        const account = await accountController.transfer(
-            contaOrigem,
-            contaDestino,
-            valor
-        );
+    const account = await accountController.transfer(
+        contaOrigem,
+        contaDestino,
+        valor
+    );
 
-        res.send(account);
-    } catch (error) {
-        next(error);
-    }
+    next(account);
 });
 
 //AVG BALANCE
-router.get('/account/avg-balance/:agencia', async (req, res, next) => {
-    try {
-        const { agencia } = req.params;
+router.get('/account/avg-balance/:agencia', async (req, _res, next) => {
+    const { agencia } = req.params;
 
-        const avg = await accountController.avgBalance(agencia);
+    const avg = await accountController.avgBalance(agencia);
 
-        res.send(avg);
-    } catch (error) {
-        next(error);
-    }
+    next(avg);
 });
 
 //LOWEST BALANCES
-router.get('/account/lowest-balances/:limit', async (req, res, next) => {
-    try {
-        const { limit } = req.params;
+router.get('/account/lowest-balances/:limit', async (req, _res, next) => {
+    const { limit } = req.params;
 
-        const lowestBalances = await accountController.lowestBalances(limit);
+    const lowestBalances = await accountController.lowestBalances(limit);
 
-        res.send(lowestBalances);
-    } catch (error) {
-        next(error);
-    }
+    next(lowestBalances);
 });
 
 //BIGGEST BALANCES
-router.get('/account/biggest-balances/:limit', async (req, res, next) => {
-    try {
-        const { limit } = req.params;
+router.get('/account/biggest-balances/:limit', async (req, _res, next) => {
+    const { limit } = req.params;
 
-        const biggestBalances = await accountController.biggestBalances(limit);
+    const biggestBalances = await accountController.biggestBalances(limit);
 
-        res.send(biggestBalances);
-    } catch (error) {
-        next(error);
-    }
+    next(biggestBalances);
 });
 
 //TRANSFER LARGE BALANCES TO PRIVATE
-router.patch('/account/transfer-to-private', async (req, res, next) => {
-    try {
-        const transferred = await accountController.transferToPrivate();
+router.patch('/account/transfer-to-private', async (req, _res, next) => {
+    const transferred = await accountController.transferToPrivate();
 
-        res.send(transferred);
-    } catch (error) {
-        next(error);
-    }
+    next(transferred);
 });
 
-router.use((error, _req, res, _) => {
-    res.status(error.status || 500).send({
-        error: error.message,
-    });
+router.use((result, _req, res, _) => {
+    if (result.error) {
+        res.status(result.status || 500).send({
+            error: result.message,
+        });
+        return;
+    }
+    res.send(result);
 });
 
 export { router as accountRouter };

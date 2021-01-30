@@ -4,6 +4,26 @@ const msgNotAccount = (branch, accountNumber) => {
     return `Não foi encontrada a conta nº ${accountNumber} na agência nº ${branch}`;
 };
 
+function getError(message, status = 400) {
+    return {
+        error: true,
+        message,
+        status,
+    };
+}
+
+const create = async (req, res) => {
+    try {
+        const account = new accountModel(req.body);
+
+        await account.save();
+
+        return account;
+    } catch (error) {
+        return getError(`Falha ao inserir a conta: ${error}`);
+    }
+};
+
 class AccountController {
     async create(fields) {
         try {
@@ -13,14 +33,14 @@ class AccountController {
 
             return account;
         } catch (error) {
-            throw new Error(`Falha ao inserir a conta: ${error}`);
+            return getError(`Falha ao inserir a conta: ${error}`);
         }
     }
 
     async deposit(branch, accountNumber, value) {
         try {
             if (value <= 0) {
-                throw new Error(
+                return getError(
                     'O depósito só aceita valores maiores que 0 (zero)'
                 );
             }
@@ -43,13 +63,14 @@ class AccountController {
             );
 
             if (!account) {
-                throw new Error(msgNotAccount(branch, accountNumber));
+                return getError(msgNotAccount(branch, accountNumber), 404);
             }
 
             return account;
         } catch (error) {
-            throw new Error(
-                `Falha ao fazer o depósito na conta: ${error.message}`
+            return getError(
+                `Falha ao fazer o depósito na conta: ${error}`,
+                404
             );
         }
     }
@@ -57,7 +78,7 @@ class AccountController {
     async withdrawal(branch, accountNumber, value, rate = 1) {
         try {
             if (value <= 0) {
-                throw new Error('Informe um valor maior que 0 (zero)');
+                return getError('Informe um valor maior que 0 (zero)');
             }
 
             const filter = { agencia: branch, conta: accountNumber };
@@ -65,12 +86,12 @@ class AccountController {
             const account = await accountModel.findOne(filter);
 
             if (!account) {
-                throw new Error(msgNotAccount(branch, accountNumber));
+                return getError(msgNotAccount(branch, accountNumber), 404);
             }
 
             const balance = account.balance - (value + rate);
             if (balance < 0) {
-                throw new Error(
+                return getError(
                     `Seu saldo de ${account.balance} é insuficiente`
                 );
             }
@@ -90,9 +111,7 @@ class AccountController {
 
             return updatedAccount;
         } catch (error) {
-            throw new Error(
-                `Falha ao fazer o saque da conta: ${error.message}`
-            );
+            return getError(`Falha ao fazer o saque da conta: ${error}`);
         }
     }
 
@@ -106,14 +125,12 @@ class AccountController {
             });
 
             if (!account) {
-                throw new Error(msgNotAccount(branch, accountNumber));
+                return getError(msgNotAccount(branch, accountNumber), 404);
             }
 
             return account;
         } catch (error) {
-            throw new Error(
-                `Falha ao buscar o saldo da conta: ${error.message}`
-            );
+            return getError(`Falha ao buscar o saldo da conta: ${error}`);
         }
     }
 
@@ -124,7 +141,7 @@ class AccountController {
             const account = await accountModel.findOneAndDelete(filter);
 
             if (!account) {
-                throw new Error(msgNotAccount(branch, accountNumber));
+                return getError(msgNotAccount(branch, accountNumber), 404);
             }
 
             const totalAccounts = await accountModel
@@ -133,7 +150,7 @@ class AccountController {
 
             return { totalAccounts };
         } catch (error) {
-            throw new Error(`Falha ao excluir a conta: ${error.message}`);
+            return getError(`Falha ao excluir a conta: ${error}`);
         }
     }
 
@@ -146,15 +163,17 @@ class AccountController {
 
             const accountOrigin = await accountModel.findOne(filterOrigin);
             if (!accountOrigin) {
-                throw new Error(
-                    `A conta de origem nº ${accountNumberOrigin} não existe!`
+                return getError(
+                    `A conta de origem nº ${accountNumberOrigin} não existe!`,
+                    404
                 );
             }
 
             const accountTarget = await accountModel.findOne(filterTarget);
             if (!accountTarget) {
-                throw new Error(
-                    `A conta de destino nº ${accountNumberTarget} não existe!`
+                return getError(
+                    `A conta de destino nº ${accountNumberTarget} não existe!`,
+                    404
                 );
             }
 
@@ -176,8 +195,8 @@ class AccountController {
 
             return { balance: accountOriginAfter.balance };
         } catch (error) {
-            throw new Error(
-                `Falha ao fazer a transferência entre as contas: ${error.message}`
+            return getError(
+                `Falha ao fazer a transferência entre as contas: ${error}`
             );
         }
     }
@@ -198,8 +217,8 @@ class AccountController {
 
             return { avgBalance };
         } catch (error) {
-            throw new Error(
-                `Falha ao calcular a média do saldo das contas: ${error.message}`
+            return getError(
+                `Falha ao calcular a média do saldo das contas: ${error}`
             );
         }
     }
@@ -214,8 +233,8 @@ class AccountController {
 
             return { lowestBalances };
         } catch (error) {
-            throw new Error(
-                `Falha ao buscar os menores saldos em conta: ${error.message}`
+            return getError(
+                `Falha ao buscar os menores saldos em conta: ${error}`
             );
         }
     }
@@ -232,7 +251,7 @@ class AccountController {
 
             return { biggestBalances };
         } catch (error) {
-            throw new Error(
+            return getError(
                 `Falha ao buscar os maiores saldos em conta: ${error.message}`
             );
         }
@@ -264,11 +283,11 @@ class AccountController {
 
             return privateAccounts;
         } catch (error) {
-            throw new Error(
-                `Falha ao transferir os clientes de maiores saldos para a agência private: ${error.message}`
+            return getError(
+                `Falha ao transferir os clientes de maiores saldos para a agência private: ${error}`
             );
         }
     }
 }
 
-export { AccountController };
+export { AccountController, create };
