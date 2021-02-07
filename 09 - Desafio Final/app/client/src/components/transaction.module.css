@@ -1,0 +1,67 @@
+.transactionCard {
+    border-radius: 8px;
+    background-color: rgba(245, 246, 250, 0.1);
+    padding: 20px;
+}
+
+.day {
+    position: relative;
+    margin-right: 15px;
+    margin-left: -10px;
+    margin-bottom: -20px;
+    margin-top: -20px;
+    text-align: center;
+}
+
+.dayIcon {
+    font-size: 50px;
+    color: #2f3640;
+}
+
+.day > .innerNum {
+    position: absolute;
+    left: 12px;
+    top: 12px;
+    font-weight: bold;
+    font-size: 1.6em;
+    font-family: 'Consolas';
+}
+
+.categoryDescription {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-top: -10px;
+    flex-grow: 2;
+}
+
+.category {
+    font-weight: bold;
+    font-size: 1.3em;
+    margin-bottom: 5px;
+}
+
+.value {
+    margin-right: 100px;
+    font-weight: bold;
+    font-size: 1.3em;
+}
+
+.iconActions {
+    font-size: 30px;
+}
+
+.icons {
+    font-size: 20px;
+    margin-right: 5px;
+}
+
+.edit {
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+.delete {
+    cursor: pointer;
+}
